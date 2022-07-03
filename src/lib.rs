@@ -112,12 +112,4 @@ impl Game {
             self.play_state = PlayState::Lost;
         }
     }
-
-    pub fn slither(&mut self, direction: Direction) {
-        if let Some(front) = self.snake.front() {
-            if let Some(next_front) = front.next(direction) {
-                self.snake.push_front(next_front);
-            }
-        }
-    }
 }
