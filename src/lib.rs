@@ -5,7 +5,10 @@ use std::cell::RefCell;
 use std::f64;
 use std::rc::Rc;
 use wasm_bindgen::{prelude::*, JsCast, UnwrapThrowExt};
-use web_sys::window;
+use web_sys::{console, window, CanvasRenderingContext2d};
+
+const UNIT_SIZE: f64 = 10.0;
+const BOARD_SIZE: f64 = 200.0;
 
 thread_local! {
     static GAME: Rc<RefCell<Game>> = Rc::new(RefCell::new(Game::new()));
@@ -36,35 +39,25 @@ pub fn render() {
     let canvas: web_sys::HtmlCanvasElement = canvas
         .dyn_into::<web_sys::HtmlCanvasElement>()
         .unwrap_throw();
-    let context = canvas
+    let ctx = canvas
         .get_context("2d")
         .unwrap_throw()
         .unwrap_throw()
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap_throw();
-    context.begin_path();
-    // Draw the outer circle
-    context
-        .arc(75.0, 75.0, 50.0, 0.0, f64::consts::PI * 2.0)
-        .unwrap_throw();
 
-    // Draw the mouth
-    context.move_to(110.0, 75.0);
-    context
-        .arc(75.0, 75.0, 35.0, 0.0, f64::consts::PI)
-        .unwrap_throw();
+    ctx.fill_rect(30.0, 30.0, 20.0, 20.0);
 
-    // Draw the left eye.
-    context.move_to(65.0, 65.0);
-    context
-        .arc(60.0, 65.0, 5.0, 0.0, f64::consts::PI * 2.0)
-        .unwrap();
+    draw_unit(ctx, 5, 5, "#000");
+}
 
-    // Draw the right eye.
-    context.move_to(95.0, 65.0);
-    context
-        .arc(90.0, 65.0, 5.0, 0.0, f64::consts::PI * 2.0)
-        .unwrap();
-
-    context.stroke();
+pub fn draw_unit(ctx: CanvasRenderingContext2d, x: i32, y: i32, color: &str) {
+    // ctx.set_fill_style(&JsValue::from_str(color));
+    ctx.fill_rect(
+        x as f64 * UNIT_SIZE,
+        (BOARD_SIZE - 1.0 - y as f64) * UNIT_SIZE,
+        UNIT_SIZE,
+        UNIT_SIZE,
+    );
+    console::log_1(&"Got here".into());
 }
