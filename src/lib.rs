@@ -3,6 +3,7 @@ use std::collections::VecDeque;
 const WIDTH: i32 = 10;
 const HEIGHT: i32 = 10;
 
+#[derive(PartialEq)]
 pub struct Position(i32, i32);
 
 pub struct Game {
@@ -85,8 +86,12 @@ impl Game {
         // Move snake forward
         let front = self.snake.front().expect("Snake body should not be empty");
         if let Some(next_front) = front.next(self.current_direction) {
-            // TODO: check for body collisions
-            self.snake.push_front(next_front);
+            if self.snake.contains(&next_front) {
+                // The snake ran into itself
+                self.play_state = PlayState::Lost;
+            } else {
+                self.snake.push_front(next_front);
+            }
         } else {
             // Snake ran off the screen
             self.play_state = PlayState::Lost;
