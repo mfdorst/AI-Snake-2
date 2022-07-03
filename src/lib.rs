@@ -98,8 +98,14 @@ impl Game {
                 return;
             } else {
                 if let Some(i) = self.food.iter().position(|p| p == &next_front) {
-                    // The snake ate, so delete the old food and replace it with a new one
-                    self.food[i] = Position::random()
+                    // Replace the food the snake is eating
+                    // Ensure that the new food is not inside the snake or under another food
+                    self.food[i] = loop {
+                        let food_pos = Position::random();
+                        if !self.snake.contains(&food_pos) && !self.food.contains(&food_pos) {
+                            break food_pos;
+                        }
+                    }
                 } else {
                     // The snake didn't eat, so remove the tail to keep it the same length
                     self.snake.pop_back();
