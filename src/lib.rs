@@ -1,3 +1,4 @@
+use rand::{thread_rng, Rng};
 use std::collections::VecDeque;
 
 const WIDTH: i32 = 10;
@@ -43,6 +44,11 @@ impl Position {
             Some(Position(x, y))
         }
     }
+
+    pub fn random() -> Self {
+        let mut rng = thread_rng();
+        Position(rng.gen_range(0..WIDTH), rng.gen_range(0..HEIGHT))
+    }
 }
 
 impl Direction {
@@ -67,7 +73,7 @@ impl Game {
             ]),
             current_direction: Direction::Right,
             next_direction: Direction::Right,
-            food: vec![],
+            food: vec![Position::random()],
             play_state: PlayState::Playing,
         }
     }
@@ -91,8 +97,11 @@ impl Game {
                 self.play_state = PlayState::Lost;
                 return;
             } else {
-                // If the snake ate, don't pop off the tail, so the snake will grow by one.
-                if self.food.contains(&next_front) {
+                if let Some(i) = self.food.iter().position(|p| p == &next_front) {
+                    // The snake ate, so delete the old food and replace it with a new one
+                    self.food[i] = Position::random()
+                } else {
+                    // The snake didn't eat, so remove the tail to keep it the same length
                     self.snake.pop_back();
                 }
                 // Move the snake head forward by popping on the new head position
