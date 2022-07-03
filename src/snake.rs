@@ -1,5 +1,5 @@
 use rand::{thread_rng, Rng};
-use std::{cell::RefCell, collections::VecDeque, rc::Rc};
+use std::collections::VecDeque;
 
 const WIDTH: i32 = 10;
 const HEIGHT: i32 = 10;
