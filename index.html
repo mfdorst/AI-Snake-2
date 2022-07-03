@@ -1,0 +1,15 @@
+<head>
+    <title>AI Snake</title>
+</head>
+
+<body>
+    <div id="root">
+        <script type="module">
+            import init from "./pkg/ai_snake_wasm.js"
+            async function main() {
+                await init();
+            }
+            main();
+        </script>
+    </div>
+</body>
