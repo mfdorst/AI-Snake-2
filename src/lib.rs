@@ -89,15 +89,19 @@ impl Game {
             if self.snake.contains(&next_front) {
                 // The snake ran into itself
                 self.play_state = PlayState::Lost;
+                return;
             } else {
+                // If the snake ate, don't pop off the tail, so the snake will grow by one.
+                if self.food.contains(&next_front) {
+                    self.snake.pop_back();
+                }
+                // Move the snake head forward by popping on the new head position
                 self.snake.push_front(next_front);
             }
         } else {
             // Snake ran off the screen
             self.play_state = PlayState::Lost;
         }
-        // TODO: If snake ate, don't pop back
-        self.snake.pop_back();
     }
 
     pub fn slither(&mut self, direction: Direction) {
