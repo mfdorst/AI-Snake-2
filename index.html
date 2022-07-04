@@ -1,20 +1,7 @@
 <head>
-    <title>AI Snake</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js" type="module"></script>
 </head>
-
-<body>
-    <div id="root">
-        <script type="module">
-            import init from "./pkg/ai_snake_wasm.js"
-            async function main() {
-                await init();
-
-                const canvas = document.querySelector('canvas');
-                const ctx = canvas.getContext('2d');
-                ctx.fillRect(50, 50, 20, 20);
-            }
-            main();
-        </script>
-        <canvas id="canvas" />
-    </div>
-</body>
+<div class="root">
+    <canvas />
+</div>

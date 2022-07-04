@@ -33,9 +33,18 @@ pub fn main() {
     });
 }
 
+macro_rules! log {
+    ($s:expr) => {
+        console::log_1(&$s.into());
+    };
+}
+
 pub fn render() {
     let document = web_sys::window().unwrap_throw().document().unwrap_throw();
-    let canvas = document.get_element_by_id("canvas").unwrap_throw();
+    let canvas = document
+        .query_selector("canvas")
+        .unwrap_throw()
+        .unwrap_throw();
     let canvas: web_sys::HtmlCanvasElement = canvas
         .dyn_into::<web_sys::HtmlCanvasElement>()
         .unwrap_throw();
@@ -46,18 +55,15 @@ pub fn render() {
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap_throw();
 
-    ctx.fill_rect(30.0, 30.0, 20.0, 20.0);
-
-    draw_unit(ctx, 5, 5, "#000");
+    draw_unit(ctx, 5, 5, "#fff");
 }
 
 pub fn draw_unit(ctx: CanvasRenderingContext2d, x: i32, y: i32, color: &str) {
-    // ctx.set_fill_style(&JsValue::from_str(color));
+    ctx.set_fill_style(&JsValue::from_str(color));
     ctx.fill_rect(
         x as f64 * UNIT_SIZE,
-        (BOARD_SIZE - 1.0 - y as f64) * UNIT_SIZE,
+        y as f64 * UNIT_SIZE,
         UNIT_SIZE,
         UNIT_SIZE,
     );
-    console::log_1(&"Got here".into());
 }
