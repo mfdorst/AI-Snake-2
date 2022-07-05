@@ -49,16 +49,16 @@ pub fn render_cell(x: i32, y: i32) {
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap_throw();
     let canvas_height = canvas.offset_height();
-    let cell_height = canvas_height / CELLS_PER_CANVAS;
+    let cell_height = canvas_height as f64 / CELLS_PER_CANVAS as f64;
 
     draw_unit(ctx, x, y, cell_height, "#fff");
 }
 
-pub fn draw_unit(ctx: CanvasRenderingContext2d, x: i32, y: i32, cell_height: i32, color: &str) {
+pub fn draw_unit(ctx: CanvasRenderingContext2d, x: i32, y: i32, cell_height: f64, color: &str) {
     ctx.set_fill_style(&JsValue::from_str(color));
     ctx.fill_rect(
-        (x * cell_height) as f64,
-        (y * cell_height) as f64,
+        x as f64 * cell_height,
+        y as f64 * cell_height,
         cell_height as f64,
         cell_height as f64,
     );
