@@ -1,16 +1,9 @@
 mod snake;
-use snake::*;
-use std::cell::RefCell;
 use std::f64;
-use std::rc::Rc;
 use wasm_bindgen::{prelude::*, JsCast, UnwrapThrowExt};
 use web_sys::{window, CanvasRenderingContext2d};
 
 const UNIT_SIZE: f64 = 10.0;
-
-thread_local! {
-    static GAME: Rc<RefCell<Game>> = Rc::new(RefCell::new(Game::new()));
-}
 
 #[wasm_bindgen]
 extern "C" {
