@@ -1,18 +1,16 @@
+use crate::consts::*;
 use rand::{thread_rng, Rng};
 use std::collections::VecDeque;
 
-const WIDTH: i32 = 10;
-const HEIGHT: i32 = 10;
-
 #[derive(PartialEq)]
-pub struct Position(i32, i32);
+pub struct Position(pub i32, pub i32);
 
 pub struct Game {
-    snake: VecDeque<Position>,
+    pub snake: VecDeque<Position>,
+    pub food: Vec<Position>,
+    pub play_state: PlayState,
     current_direction: Direction,
     next_direction: Direction,
-    food: Vec<Position>,
-    play_state: PlayState,
 }
 
 #[derive(PartialEq, Copy, Clone)]
@@ -39,7 +37,7 @@ impl Position {
             Left => (x - 1, y),
             Right => (x + 1, y),
         };
-        if x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT {
+        if x < 0 || y < 0 || x >= CELLS_PER_CANVAS || y >= CELLS_PER_CANVAS {
             None
         } else {
             Some(Position(x, y))
@@ -48,7 +46,10 @@ impl Position {
 
     pub fn random() -> Self {
         let mut rng = thread_rng();
-        Position(rng.gen_range(0..WIDTH), rng.gen_range(0..HEIGHT))
+        Position(
+            rng.gen_range(0..CELLS_PER_CANVAS),
+            rng.gen_range(0..CELLS_PER_CANVAS),
+        )
     }
 }
 
@@ -68,9 +69,9 @@ impl Game {
     pub fn new() -> Self {
         Self {
             snake: VecDeque::from([
-                Position(WIDTH - 4, HEIGHT / 2),
-                Position(WIDTH - 5, HEIGHT / 2),
-                Position(WIDTH - 6, HEIGHT / 2),
+                Position(6, CELLS_PER_CANVAS / 2),
+                Position(5, CELLS_PER_CANVAS / 2),
+                Position(4, CELLS_PER_CANVAS / 2),
             ]),
             current_direction: Direction::Right,
             next_direction: Direction::Right,
