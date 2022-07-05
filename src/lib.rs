@@ -3,7 +3,7 @@ use std::f64;
 use wasm_bindgen::{prelude::*, JsCast, UnwrapThrowExt};
 use web_sys::{window, CanvasRenderingContext2d};
 
-const UNIT_SIZE: f64 = 10.0;
+const CELLS_PER_CANVAS: i32 = 50;
 
 #[wasm_bindgen]
 extern "C" {
@@ -45,16 +45,18 @@ pub fn render() {
         .unwrap_throw()
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap_throw();
+    let canvas_height = canvas.offset_height();
+    let cell_height = canvas_height / CELLS_PER_CANVAS;
 
-    draw_unit(ctx, 5, 5, "#fff");
+    draw_unit(ctx, 5, 5, cell_height, "#fff");
 }
 
-pub fn draw_unit(ctx: CanvasRenderingContext2d, x: i32, y: i32, color: &str) {
+pub fn draw_unit(ctx: CanvasRenderingContext2d, x: i32, y: i32, cell_height: i32, color: &str) {
     ctx.set_fill_style(&JsValue::from_str(color));
     ctx.fill_rect(
-        x as f64 * UNIT_SIZE,
-        y as f64 * UNIT_SIZE,
-        UNIT_SIZE,
-        UNIT_SIZE,
+        (x * cell_height) as f64,
+        (y * cell_height) as f64,
+        cell_height as f64,
+        cell_height as f64,
     );
 }
