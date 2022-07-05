@@ -1,42 +1,40 @@
 mod snake;
-use js_sys::Function;
 use snake::*;
 use std::cell::RefCell;
 use std::f64;
 use std::rc::Rc;
 use wasm_bindgen::{prelude::*, JsCast, UnwrapThrowExt};
-use web_sys::{console, window, CanvasRenderingContext2d};
+use web_sys::{window, CanvasRenderingContext2d};
 
 const UNIT_SIZE: f64 = 10.0;
-const BOARD_SIZE: f64 = 200.0;
 
 thread_local! {
     static GAME: Rc<RefCell<Game>> = Rc::new(RefCell::new(Game::new()));
+}
 
-    static TICK_CLOSURE: Closure<dyn FnMut()> = Closure::wrap(Box::new({
-        let game = GAME.with(|game| game.clone());
-        move || game.borrow_mut().tick()
-    }));
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+}
+
+macro_rules! console_log {
+    ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
 
 #[wasm_bindgen(start)]
 pub fn main() {
     render();
-    TICK_CLOSURE.with(|tick_closure| {
-        window()
-            .unwrap_throw()
-            .set_interval_with_callback_and_timeout_and_arguments_0(
-                tick_closure.as_ref().dyn_ref::<Function>().unwrap_throw(),
-                500,
-            )
-            .unwrap_throw();
-    });
-}
+    let tick_closure = Closure::wrap(Box::new(|| console_log!("Hello")) as Box<dyn FnMut()>);
 
-macro_rules! log {
-    ($s:expr) => {
-        console::log_1(&$s.into());
-    };
+    window()
+        .unwrap_throw()
+        .set_interval_with_callback_and_timeout_and_arguments_0(
+            tick_closure.as_ref().unchecked_ref(),
+            500,
+        )
+        .unwrap_throw();
+    tick_closure.forget();
 }
 
 pub fn render() {
