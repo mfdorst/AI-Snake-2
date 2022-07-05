@@ -17,8 +17,11 @@ macro_rules! console_log {
 
 #[wasm_bindgen(start)]
 pub fn main() {
-    render();
-    let tick_closure = Closure::wrap(Box::new(|| console_log!("Hello")) as Box<dyn FnMut()>);
+    let mut x = 0;
+    let tick_closure = Closure::wrap(Box::new(move || {
+        render_cell(x, x);
+        x += 1;
+    }) as Box<dyn FnMut()>);
 
     window()
         .unwrap_throw()
@@ -30,7 +33,7 @@ pub fn main() {
     tick_closure.forget();
 }
 
-pub fn render() {
+pub fn render_cell(x: i32, y: i32) {
     let document = web_sys::window().unwrap_throw().document().unwrap_throw();
     let canvas = document
         .query_selector("canvas")
@@ -48,7 +51,7 @@ pub fn render() {
     let canvas_height = canvas.offset_height();
     let cell_height = canvas_height / CELLS_PER_CANVAS;
 
-    draw_unit(ctx, 5, 5, cell_height, "#fff");
+    draw_unit(ctx, x, y, cell_height, "#fff");
 }
 
 pub fn draw_unit(ctx: CanvasRenderingContext2d, x: i32, y: i32, cell_height: i32, color: &str) {
