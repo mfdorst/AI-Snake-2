@@ -20,6 +20,7 @@ pub fn main() {
     let game = Rc::new(RefCell::new(Game::new()));
     let tick_closure = Closure::wrap(Box::new(move || {
         game.borrow_mut().tick();
+        canvas.clear();
         draw_view(&canvas, &game.borrow());
     }) as Box<dyn FnMut()>);
 

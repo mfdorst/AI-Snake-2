@@ -5,6 +5,7 @@ use web_sys::{window, CanvasRenderingContext2d, HtmlCanvasElement};
 
 pub struct Canvas {
     context: CanvasRenderingContext2d,
+    height: i32,
     cell_height: f64,
 }
 
@@ -23,6 +24,7 @@ impl Canvas {
         let cell_height = height as f64 / CELLS_PER_CANVAS as f64;
         Self {
             context,
+            height,
             cell_height,
         }
     }
@@ -35,5 +37,10 @@ impl Canvas {
             self.cell_height as f64,
             self.cell_height as f64,
         );
+    }
+
+    pub fn clear(&self) {
+        self.context
+            .clear_rect(0.0, 0.0, self.height as f64, self.height as f64);
     }
 }
