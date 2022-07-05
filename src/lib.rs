@@ -1,19 +1,11 @@
 mod snake;
+mod util;
 use std::f64;
+// use util::console_log;
 use wasm_bindgen::{prelude::*, JsCast, UnwrapThrowExt};
 use web_sys::{window, CanvasRenderingContext2d};
 
 const CELLS_PER_CANVAS: i32 = 50;
-
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
-
-macro_rules! console_log {
-    ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
-}
 
 #[wasm_bindgen(start)]
 pub fn main() {
