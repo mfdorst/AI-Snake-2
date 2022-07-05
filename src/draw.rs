@@ -5,8 +5,6 @@ use web_sys::{window, CanvasRenderingContext2d, HtmlCanvasElement};
 
 pub struct Canvas {
     context: CanvasRenderingContext2d,
-    height: i32,
-    cell_height: f64,
 }
 
 impl Canvas {
@@ -20,27 +18,23 @@ impl Canvas {
             .unwrap()
             .dyn_into::<web_sys::CanvasRenderingContext2d>()
             .unwrap();
-        let height = canvas.offset_height();
-        let cell_height = height as f64 / CELLS_PER_CANVAS as f64;
-        Self {
-            context,
-            height,
-            cell_height,
-        }
+        canvas.set_height(CANVAS_HEIGHT);
+        canvas.set_width(CANVAS_HEIGHT);
+        Self { context }
     }
 
     pub fn draw_cell(&self, x: i32, y: i32, color: &str) {
         self.context.set_fill_style(&JsValue::from_str(color));
         self.context.fill_rect(
-            x as f64 * self.cell_height,
-            y as f64 * self.cell_height,
-            self.cell_height as f64,
-            self.cell_height as f64,
+            x as f64 * CELL_HEIGHT,
+            y as f64 * CELL_HEIGHT,
+            CELL_HEIGHT as f64,
+            CELL_HEIGHT as f64,
         );
     }
 
     pub fn clear(&self) {
         self.context
-            .clear_rect(0.0, 0.0, self.height as f64, self.height as f64);
+            .clear_rect(0.0, 0.0, CANVAS_HEIGHT as f64, CANVAS_HEIGHT as f64);
     }
 }
