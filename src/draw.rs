@@ -4,9 +4,7 @@ use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{window, CanvasRenderingContext2d, HtmlCanvasElement};
 
 pub struct Canvas {
-    canvas: HtmlCanvasElement,
     context: CanvasRenderingContext2d,
-    height: i32,
     cell_height: f64,
 }
 
@@ -14,8 +12,7 @@ impl Canvas {
     pub fn new() -> Self {
         let document = window().unwrap().document().unwrap();
         let canvas = document.query_selector("canvas").unwrap().unwrap();
-        let canvas: web_sys::HtmlCanvasElement =
-            canvas.dyn_into::<web_sys::HtmlCanvasElement>().unwrap();
+        let canvas: HtmlCanvasElement = canvas.dyn_into::<HtmlCanvasElement>().unwrap();
         let context = canvas
             .get_context("2d")
             .unwrap()
@@ -25,9 +22,7 @@ impl Canvas {
         let height = canvas.offset_height();
         let cell_height = height as f64 / CELLS_PER_CANVAS as f64;
         Self {
-            canvas,
             context,
-            height,
             cell_height,
         }
     }
