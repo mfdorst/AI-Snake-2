@@ -24,4 +24,5 @@ features = [
     "Element",
     "HtmlCanvasElement",
     "Window",
+    "KeyboardEvent"
 ]

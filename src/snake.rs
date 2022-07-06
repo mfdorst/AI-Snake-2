@@ -1,4 +1,4 @@
-use crate::consts::*;
+use crate::{consts::*, util, util::console_log};
 use rand::{thread_rng, Rng};
 use std::collections::VecDeque;
 
@@ -13,7 +13,7 @@ pub struct Game {
     next_direction: Direction,
 }
 
-#[derive(PartialEq, Copy, Clone)]
+#[derive(PartialEq, Copy, Clone, Debug)]
 pub enum Direction {
     Up,
     Down,
@@ -32,8 +32,8 @@ impl Position {
         use Direction::*;
         let &Position(x, y) = self;
         let (x, y) = match direction {
-            Up => (x, y + 1),
-            Down => (x, y - 1),
+            Up => (x, y - 1),
+            Down => (x, y + 1),
             Left => (x - 1, y),
             Right => (x + 1, y),
         };
