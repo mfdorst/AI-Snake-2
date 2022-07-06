@@ -21,6 +21,7 @@ pub enum Direction {
     Right,
 }
 
+#[derive(PartialEq)]
 pub enum PlayState {
     Paused,
     Playing,
@@ -87,7 +88,20 @@ impl Game {
         self.next_direction = direction;
     }
 
+    pub fn toggle_pause_play(&mut self) {
+        self.play_state = match self.play_state {
+            PlayState::Paused => PlayState::Playing,
+            PlayState::Playing => PlayState::Paused,
+            PlayState::Lost => PlayState::Lost,
+        }
+    }
+
     pub fn tick(&mut self) {
+        // If the game is paused or the player has lost, do nothing.
+        if self.play_state != PlayState::Playing {
+            return;
+        }
+
         // Finalize the direction the snake will move this tick
         self.current_direction = self.next_direction;
 

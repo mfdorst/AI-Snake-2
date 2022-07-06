@@ -15,6 +15,7 @@ pub fn register_keyboard_listener(game: &Rc<RefCell<Game>>) -> Option<()> {
             "ArrowDown" => game.borrow_mut().change_direction(Direction::Down),
             "ArrowLeft" => game.borrow_mut().change_direction(Direction::Left),
             "ArrowRight" => game.borrow_mut().change_direction(Direction::Right),
+            " " => game.borrow_mut().toggle_pause_play(),
             _ => {}
         }
     }) as Box<dyn FnMut(_)>);
