@@ -7,6 +7,7 @@ mod view;
 extern crate console_error_panic_hook;
 use std::{cell::RefCell, rc::Rc};
 
+use consts::MS_PER_TICK;
 use draw::Canvas;
 use snake::Game;
 use view::draw_view;
@@ -32,7 +33,7 @@ pub fn main() {
         .unwrap_throw()
         .set_interval_with_callback_and_timeout_and_arguments_0(
             tick_closure.as_ref().unchecked_ref(),
-            500,
+            MS_PER_TICK,
         )
         .unwrap();
     tick_closure.forget();
