@@ -1,4 +1,4 @@
-use crate::{consts::*, util, util::console_log};
+use crate::consts::*;
 use rand::{thread_rng, Rng};
 use std::collections::VecDeque;
 
